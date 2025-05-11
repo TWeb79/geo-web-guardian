@@ -43,7 +43,7 @@ const Index = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Analyze and optimize your website for Generative Engine Optimization to improve visibility and context for AI-powered search engines.<br></br>
             This website is intented to provide a validation based on the recommendations of this <b><a href="https://www.linkedin.com/pulse/geo-building-ai-ready-websites-new-framework-age-generative-weber-qv7zf" target="_blank">article</a></b>. 
-            <br></br><small><i>This prototype has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it! Thanks, <b><a href="https://www.linkedin.com/in/torstenweber/" target="_blank">Torsten</a></b>
+            <br></br><small><i>This prototype (<a href="https://github.com/TWeb79/geo-web-guardian" target="_new">Github</a>) has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it! Thanks, <b><a href="https://www.linkedin.com/in/torstenweber/" target="_blank">Torsten</a></b>
           </p>
         </div>
         
