@@ -40,8 +40,9 @@ const Index = () => {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">GEO Validator</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Analyze and optimize your website for Generative Engine Optimization to improve visibility and context for AI-powered search engines.
-            <br></br><small><i>This prototype has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it! Thanks, <a href="https://www.linkedin.com/in/torstenweber/" target="_blank">Torsten</a>
+            Analyze and optimize your website for Generative Engine Optimization to improve visibility and context for AI-powered search engines.<br></br>
+            This website is intented to provide a validation based on the recommendations of this <b><a href="https://www.linkedin.com/pulse/geo-building-ai-ready-websites-new-framework-age-generative-weber-qv7zf" target="_blank">article</a></b>. 
+            <br></br><small><i>This prototype has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it! Thanks, <b><a href="https://www.linkedin.com/in/torstenweber/" target="_blank">Torsten</a></b>
           </p>
         </div>
         
