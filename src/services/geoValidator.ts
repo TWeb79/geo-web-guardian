@@ -195,4 +195,3 @@ function result(status: GeoCheckResult["status"], details: string, htmlSource?: 
     htmlSource,
   };
 }
-}
