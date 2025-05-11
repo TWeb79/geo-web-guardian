@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import UrlForm from "@/components/UrlForm";
 import ResultCard from "@/components/ResultCard";
 import ScoreDisplay from "@/components/ScoreDisplay";
+import GeoChecklist from "@/components/GeoChecklist";
 import { validateUrl } from "@/services/geoValidator";
 import { GeoResults } from "@/types/geo";
 import { toast } from "@/components/ui/use-toast";
@@ -106,6 +107,8 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+            
+            <GeoChecklist />
           </div>
         )}
       </div>
