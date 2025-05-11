@@ -1,164 +1,112 @@
-
 import { GeoCheckResult, GeoResults } from "@/types/geo";
-
-// This is a mock implementation of a GEO validator
-// In a real application, you'd need to:
-// 1. Make a proxy request to fetch the website HTML
-// 2. Parse the HTML and perform actual validations
-// 3. Handle CORS and other security concerns
+import fetch from "node-fetch";
+import { JSDOM } from "jsdom";
 
 export async function validateUrl(url: string): Promise<GeoResults> {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  // In a real implementation, we would fetch and analyze the actual HTML
-  // For the demo, we'll return mock results based on the URL
-  
-  const mockResults = generateMockResults(url);
-  return mockResults;
-}
+  const response = await fetch(url);
+  const html = await response.text();
+  const dom = new JSDOM(html);
+  const document = dom.window.document;
 
-function generateMockResults(url: string): GeoResults {
-  // Create somewhat realistic but random results
-  // In a real implementation, you would analyze the actual HTML content
-  
-  const randomStatus = (): GeoCheckResult["status"] => {
-    const rand = Math.random();
-    if (rand > 0.7) return "ok";
-    if (rand > 0.3) return "info";
-    return "alarm";
-  };
+  const semanticStatus = validateSemanticHtml(document);
+  const metadataStatus = validateMetadata(document);
+  const structuredDataStatus = validateStructuredData(document);
+  const aiReadinessStatus = validateAiReadiness(document);
+  const accessibilityStatus = validateAccessibility(document);
+  const crawlabilityStatus = validateCrawlability(document);
 
-  const getStatusIcon = (status: GeoCheckResult["status"]): GeoCheckResult["icon"] => {
-    switch (status) {
-      case "ok": return "✅";
-      case "info": return "ℹ️";
-      case "alarm": return "🚨";
-    }
-  };
-
-  const getHtmlSource = (status: GeoCheckResult["status"], type: string): string | undefined => {
-    if (status === 'ok') return undefined;
-    
-    // Mock HTML source examples based on the type of check and status
-    const sources = {
-      semanticHtml: {
-        info: `<div class="content">\n  <!-- Missing semantic tags like <article> or <section> -->\n  <div class="blog-post">\n    <h2>Blog Title</h2>\n    <div class="content">Blog content...</div>\n  </div>\n</div>`,
-        alarm: `<!-- No semantic HTML structure -->\n<div>\n  <div>\n    <h1>Website Title</h1>\n  </div>\n  <div>\n    <div>Navigation links</div>\n  </div>\n</div>`
-      },
-      metadata: {
-        info: `<head>\n  <title>Page Title</title>\n  <!-- Missing meta description -->\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n</head>`,
-        alarm: `<head>\n  <!-- Missing title tag -->\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n</head>`
-      },
-      structuredData: {
-        info: `<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "Product",\n  "name": "Product Name"\n  <!-- Missing essential properties like description, offers -->\n}\n</script>`,
-        alarm: `<!-- Missing structured data -->\n<head>\n  <title>Product Page</title>\n  <meta name="description" content="Product description">\n</head>`
-      },
-      aiReadiness: {
-        info: `<!-- Content not organized in modular blocks -->\n<div>\n  <p>First paragraph about topic A.</p>\n  <p>Second paragraph about topic B.</p>\n  <p>Third paragraph about topic A again.</p>\n</div>`,
-        alarm: `<div>\n  <!-- No semantic structure, no fallbacks -->\n  <div id="dynamic-content">\n    <!-- Content loaded by JavaScript without fallbacks -->\n  </div>\n</div>`
-      },
-      accessibility: {
-        info: `<img src="image.jpg" alt="" loading="eager">\n<!-- Missing meaningful alt text and not using lazy loading -->`,
-        alarm: `<img src="header.jpg">\n<!-- Missing alt attribute completely -->`
-      },
-      crawlability: {
-        info: `<!-- Missing preload directives -->\n<head>\n  <title>Page Title</title>\n  <link rel="stylesheet" href="styles.css">\n  <!-- No preload for critical resources -->\n</head>`,
-        alarm: `<!-- JavaScript-dependent navigation without fallbacks -->\n<div id="nav-container">\n  <!-- Navigation rendered by JavaScript -->\n</div>\n<script>\n  document.addEventListener('DOMContentLoaded', () => {\n    renderNavigation();\n  });\n</script>`
-      }
-    };
-    
-    return status === 'info' ? sources[type as keyof typeof sources].info : sources[type as keyof typeof sources].alarm;
-  };
-
-  const semanticStatus = randomStatus();
-  const metadataStatus = randomStatus();
-  const structuredDataStatus = randomStatus();
-  const aiReadinessStatus = randomStatus();
-  const accessibilityStatus = randomStatus();
-  const crawlabilityStatus = randomStatus();
-
-  // Calculate score based on the status of each category
   const calculateScore = () => {
-    const statusScore = {
-      ok: 100,
-      info: 50,
-      alarm: 0,
-    };
-    
+    const statusScore = { ok: 100, info: 50, alarm: 0 };
     const total = [
-      semanticStatus, 
-      metadataStatus, 
-      structuredDataStatus, 
-      aiReadinessStatus, 
-      accessibilityStatus, 
-      crawlabilityStatus
-    ].reduce((acc, status) => acc + statusScore[status], 0);
-    
+      semanticStatus,
+      metadataStatus,
+      structuredDataStatus,
+      aiReadinessStatus,
+      accessibilityStatus,
+      crawlabilityStatus,
+    ].reduce((acc, status) => acc + statusScore[status.status], 0);
     return Math.round(total / 6);
   };
 
   return {
-    semanticHtml: {
-      status: semanticStatus,
-      icon: getStatusIcon(semanticStatus),
-      details: semanticStatus === "ok"
-        ? "Good use of semantic HTML elements. All sections properly structured."
-        : semanticStatus === "info"
-        ? "Some semantic HTML elements present, but structure could be improved."
-        : "Poor semantic structure. Missing essential HTML5 elements.",
-      htmlSource: getHtmlSource(semanticStatus, 'semanticHtml')
-    },
-    metadata: {
-      status: metadataStatus,
-      icon: getStatusIcon(metadataStatus),
-      details: metadataStatus === "ok"
-        ? "All required meta tags present including title, description, and canonical."
-        : metadataStatus === "info"
-        ? "Essential meta tags present, but missing AI-specific metadata."
-        : "Missing critical meta tags. Title or description absent.",
-      htmlSource: getHtmlSource(metadataStatus, 'metadata')
-    },
-    structuredData: {
-      status: structuredDataStatus,
-      icon: getStatusIcon(structuredDataStatus),
-      details: structuredDataStatus === "ok"
-        ? "Valid JSON-LD found with appropriate schema types and complete fields."
-        : structuredDataStatus === "info"
-        ? "Basic structured data present, but missing some recommended properties."
-        : "No structured data found or invalid JSON-LD implementation.",
-      htmlSource: getHtmlSource(structuredDataStatus, 'structuredData')
-    },
-    aiReadiness: {
-      status: aiReadinessStatus,
-      icon: getStatusIcon(aiReadinessStatus),
-      details: aiReadinessStatus === "ok"
-        ? "Content well-structured for AI consumption with appropriate sections and fallbacks."
-        : aiReadinessStatus === "info"
-        ? "Basic AI readiness present, but missing advanced features like AI-specific metadata."
-        : "Poor AI readiness. Content not modular or easily parseable by AI systems.",
-      htmlSource: getHtmlSource(aiReadinessStatus, 'aiReadiness')
-    },
-    accessibility: {
-      status: accessibilityStatus,
-      icon: getStatusIcon(accessibilityStatus),
-      details: accessibilityStatus === "ok"
-        ? "All images have alt text and lazy loading implemented for non-critical assets."
-        : accessibilityStatus === "info"
-        ? "Basic accessibility features present, but missing some image attributes or optimizations."
-        : "Poor accessibility. Missing alt text on images or proper multimodal support.",
-      htmlSource: getHtmlSource(accessibilityStatus, 'accessibility')
-    },
-    crawlability: {
-      status: crawlabilityStatus,
-      icon: getStatusIcon(crawlabilityStatus),
-      details: crawlabilityStatus === "ok"
-        ? "Excellent crawl structure with proper navigation and asset loading strategy."
-        : crawlabilityStatus === "info"
-        ? "Adequate crawlability, but missing preload directives or performance optimizations."
-        : "Poor crawlability. JavaScript-dependent content without fallbacks or excessive load time.",
-      htmlSource: getHtmlSource(crawlabilityStatus, 'crawlability')
-    },
-    score: calculateScore()
+    semanticHtml: semanticStatus,
+    metadata: metadataStatus,
+    structuredData: structuredDataStatus,
+    aiReadiness: aiReadinessStatus,
+    accessibility: accessibilityStatus,
+    crawlability: crawlabilityStatus,
+    score: calculateScore(),
+  };
+}
+
+function validateSemanticHtml(document: Document): GeoCheckResult {
+  const hasHeader = document.querySelector("header");
+  const hasMain = document.querySelector("main");
+  const hasFooter = document.querySelector("footer");
+
+  if (hasHeader && hasMain && hasFooter) return result("ok", "Proper semantic layout with header, main, footer.");
+  if (hasMain) return result("info", "Partial semantic tags detected, missing full layout.");
+  return result("alarm", "No semantic HTML structure detected.");
+}
+
+function validateMetadata(document: Document): GeoCheckResult {
+  const title = document.querySelector("title");
+  const description = document.querySelector("meta[name='description']");
+  const canonical = document.querySelector("link[rel='canonical']");
+
+  if (title && description && canonical) return result("ok", "All essential metadata tags present.");
+  if (title || description) return result("info", "Some essential metadata present, consider adding canonical or description.");
+  return result("alarm", "Missing critical meta tags.");
+}
+
+function validateStructuredData(document: Document): GeoCheckResult {
+  const scripts = Array.from(document.querySelectorAll("script[type='application/ld+json']"));
+  if (scripts.length === 0) return result("alarm", "No structured data found.");
+  let valid = false;
+  try {
+    for (const script of scripts) {
+      const json = JSON.parse(script.textContent || "{}");
+      if (json["@context"] && json["@type"]) {
+        valid = true;
+        break;
+      }
+    }
+  } catch (e) {
+    return result("alarm", "Structured data script is invalid JSON.");
+  }
+  return valid ? result("ok", "Valid structured data with schema.org context and type.") : result("info", "Structured data present but incomplete.");
+}
+
+function validateAiReadiness(document: Document): GeoCheckResult {
+  const hasSections = document.querySelectorAll("section").length > 0;
+  const hasSchemaTags = document.querySelector("[itemscope], [itemtype], [itemprop]");
+  if (hasSections && hasSchemaTags) return result("ok", "AI-ready structure with schema and sectioning.");
+  if (hasSections || hasSchemaTags) return result("info", "Some AI readiness features detected.");
+  return result("alarm", "Content not structured for AI parsing.");
+}
+
+function validateAccessibility(document: Document): GeoCheckResult {
+  const images = Array.from(document.querySelectorAll("img"));
+  const missingAlt = images.filter(img => !img.hasAttribute("alt") || img.getAttribute("alt") === "").length;
+  if (missingAlt === 0) return result("ok", "All images have proper alt text.");
+  if (missingAlt < images.length) return result("info", "Some images missing meaningful alt text.");
+  return result("alarm", "No images have proper alt text.");
+}
+
+function validateCrawlability(document: Document): GeoCheckResult {
+  const preloadLinks = document.querySelectorAll("link[rel='preload']");
+  const hasNav = document.querySelector("nav");
+  if (preloadLinks.length > 0 && hasNav) return result("ok", "Page is crawlable with nav and preload strategies.");
+  if (hasNav) return result("info", "Navigation present but missing preload directives.");
+  return result("alarm", "Poor crawlability structure.");
+}
+
+function result(status: GeoCheckResult["status"], details: string): GeoCheckResult {
+  const icons = { ok: "✅", info: "ℹ️", alarm: "🚨" };
+  return {
+    status,
+    icon: icons[status],
+    details,
+    htmlSource: undefined,
   };
 }
