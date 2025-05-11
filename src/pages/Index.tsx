@@ -38,10 +38,10 @@ const Index = () => {
     <div className="container mx-auto py-8 max-w-7xl">
       <div className="space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">GEO Validator by Torsten Weber</h1>
+          <h1 className="text-3xl font-bold tracking-tight">GEO Validator</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Analyze and optimize your website for Generative Engine Optimization to improve visibility and context for AI-powered search engines.
-            <br></br><small><i>This prototype has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it: <a href="https://www.linkedin.com/in/torstenweber/" target="_blank">My LinkedIn Profile</a>
+            <br></br><small><i>This prototype has been developed with lovable.dev for demonstration purposes.</i></small><br></br><br></br>Let me know how you like it! Thanks, <a href="https://www.linkedin.com/in/torstenweber/" target="_blank">Torsten</a>
           </p>
         </div>
         
