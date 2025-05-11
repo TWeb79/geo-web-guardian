@@ -41,7 +41,7 @@ const Index = () => {
           <h1 className="text-3xl font-bold tracking-tight">GEO Validator by Torsten Weber</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Analyze and optimize your website for Generative Engine Optimization to improve visibility and context for AI-powered search engines.
-            <br>This prototype has been developed with lovable.dev for demonstration purposes.</br>
+            <br></br>This prototype has been developed with lovable.dev for demonstration purposes. <br></br>T.Weber <a href="https://www.linkedin.com/in/torstenweber/" target="_blank">My LinkedIn Profile</a>
           </p>
         </div>
         
