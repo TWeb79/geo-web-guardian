@@ -50,7 +50,7 @@ export async function validateUrl(url: string): Promise<GeoResults> {
     // Return a default result with error state
     const errorResult: GeoCheckResult = { 
       status: 'alarm', 
-      icon: '🚨', 
+      icon: 'ALERT', 
       details: `Error fetching or processing URL: ${error instanceof Error ? error.message : String(error)}` 
     };
     
@@ -183,7 +183,7 @@ function validateCrawlability(document: Document): GeoCheckResult {
 }
 
 function result(status: GeoCheckResult["status"], details: string, htmlSource?: string): GeoCheckResult {
-  const icons = { ok: "✅", info: "ℹ️", alarm: "🚨" };
+  const icons = { ok: "OK", info: "INFO", alarm: "ALERT" };
   return {
     status,
     icon: icons[status],

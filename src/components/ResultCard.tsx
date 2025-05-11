@@ -37,16 +37,7 @@ const ResultCard = ({ title, result }: ResultCardProps) => {
   };
 
   const getStatusText = () => {
-    switch (result.status) {
-      case 'ok':
-        return 'OK';
-      case 'info':
-        return 'Information';
-      case 'alarm':
-        return 'Alarm';
-      default:
-        return '';
-    }
+    return result.icon;
   };
 
   return (

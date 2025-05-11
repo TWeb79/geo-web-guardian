@@ -1,7 +1,7 @@
 
 export interface GeoCheckResult {
   status: 'ok' | 'info' | 'alarm';
-  icon: '✅' | 'ℹ️' | '🚨';
+  icon: 'OK' | 'INFO' | 'ALERT';
   details: string;
   htmlSource?: string; // The relevant HTML source code where the issue was found
 }

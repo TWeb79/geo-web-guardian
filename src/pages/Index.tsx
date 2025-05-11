@@ -86,15 +86,15 @@ const Index = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p>
-                  <span className="text-lg mr-2">✅</span>
+                  <span className="text-lg mr-2">OK</span>
                   <strong>OK:</strong> This aspect of your website is fully optimized for generative AI engines.
                 </p>
                 <p>
-                  <span className="text-lg mr-2">ℹ️</span>
+                  <span className="text-lg mr-2">INFO</span>
                   <strong>Information:</strong> Partially compliant or missing optional optimizations that could improve AI understanding.
                 </p>
                 <p>
-                  <span className="text-lg mr-2">🚨</span>
+                  <span className="text-lg mr-2">ALERT</span>
                   <strong>Alarm:</strong> This aspect needs immediate attention as it may significantly impact how AI engines interpret your content.
                 </p>
                 <div className="pt-4">
