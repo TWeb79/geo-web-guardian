@@ -183,11 +183,16 @@ function validateCrawlability(document: Document): GeoCheckResult {
 }
 
 function result(status: GeoCheckResult["status"], details: string, htmlSource?: string): GeoCheckResult {
-  const icons = { ok: "OK", info: "INFO", alarm: "ALERT" };
+  const icons: Record<GeoCheckResult["status"], "OK" | "INFO" | "ALERT"> = {
+    ok: "OK",
+    info: "INFO", 
+    alarm: "ALERT"
+  };
   return {
     status,
     icon: icons[status],
     details,
     htmlSource,
   };
+}
 }
